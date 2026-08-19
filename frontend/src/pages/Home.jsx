@@ -60,9 +60,9 @@ function Home() {
     const { scrollY } = useScroll();
 
     const smoothScroll = useSpring(scrollY, {
-        stiffness: 100,
-        damping: 30,
-        mass: 0.5,
+        stiffness: 160,
+        damping: 35,
+        mass: 0.25,
     });
 
 
