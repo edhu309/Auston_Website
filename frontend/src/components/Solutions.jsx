@@ -116,15 +116,12 @@ function Solutions() {
             id="solutions"
             ref={sectionRef}
             className="
-                relative
-                overflow-hidden
-                bg-gradient-to-b
-                from-[#F8FAFD]
-                via-[#E8EFF7]
-                to-[#102F55]
-                py-24
-                sm:py-32
-            "
+    relative
+    overflow-hidden
+    bg-[#F8FAFD]
+    py-24
+    sm:py-32
+"
         >
 
             {/* =====================================================
