@@ -1,238 +1,487 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { Link } from "react-router-dom";
+
+const products = [
+    ["Floor Care Chemicals", "/products/floor-care-chemicals"],
+    ["Kitchen Care Chemicals", "/products/kitchen-care-chemicals"],
+    ["Laundry Care Products", "/products/laundry-care-products"],
+    ["Janitorial Tools", "/products/janitorial-tools"],
+    ["Cleaning Machineries", "/products/cleaning-machineries"],
+    ["Hotel Amenities", "/products/hotel-amenities"],
+    ["Paper Products", "/products/paper-products"],
+    ["Dispensers", "/products/dispensers"],
+    ["Air Fresheners", "/products/air-fresheners"],
+    ["Room Essentials", "/products/room-essentials"],
+    ["Chemical Dilution Machines", "/products/chemical-dilution-machines"],
+];
+
+const industries = [
+    ["Hospitality / HoReCa", "/industries/hospitality"],
+    ["Healthcare", "/industries/healthcare"],
+    ["Food & Beverages", "/industries/food-beverages"],
+    ["Facility Management", "/industries/facility-management"],
+    ["Institutions", "/industries/institutions"],
+    ["Dairy & Poultry", "/industries/dairy-poultry"],
+    ["Life Science", "/industries/life-science"],
+];
+
+function Dropdown({ label, items, open, onOpen, onClose }) {
+    return (
+        <div
+            className="relative"
+            onMouseEnter={onOpen}
+            onMouseLeave={onClose}
+        >
+            <button
+                type="button"
+                onClick={() => (open ? onClose() : onOpen())}
+                onFocus={onOpen}
+                aria-haspopup="true"
+                aria-expanded={open}
+                className="group relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold text-slate-700 transition-colors duration-200 hover:text-[#0A3263] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F59E0B]/60"
+            >
+                <span>{label}</span>
+
+                <motion.svg
+                    animate={{ rotate: open ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-3.5 w-3.5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                >
+                    <path d="M5.5 7.5 10 12l4.5-4.5 1.5 1.5-6 6-6-6 1.5-1.5Z" />
+                </motion.svg>
+            </button>
+
+            <AnimatePresence>
+                {open && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                        transition={{
+                            duration: 0.18,
+                            ease: [0.16, 1, 0.3, 1],
+                        }}
+                        className="absolute left-1/2 top-full z-50 w-[300px] -translate-x-1/2 pt-3"
+                    >
+                        <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white/95 p-2 shadow-[0_20px_60px_rgba(10,50,99,0.14)] backdrop-blur-xl">
+
+                            {items.map(([name, path]) => (
+                                <Link
+                                    key={path}
+                                    to={path}
+                                    onClick={onClose}
+                                    className="group flex items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-700 transition-all duration-200 hover:bg-[#0A3263]/[0.06] hover:text-[#0A3263] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F59E0B]/50"
+                                >
+                                    <span>{name}</span>
+
+                                    <span
+                                        className="translate-x-[-4px] opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100"
+                                        aria-hidden="true"
+                                    >
+                                        →
+                                    </span>
+                                </Link>
+                            ))}
+
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+}
+
+function MobileDropdown({
+    label,
+    items,
+    open,
+    onToggle,
+    onClose,
+}) {
+    return (
+        <div className="rounded-2xl bg-white/20">
+
+            <button
+                type="button"
+                onClick={onToggle}
+                aria-expanded={open}
+                className="flex w-full items-center justify-between rounded-2xl px-4 py-3.5 text-base font-semibold text-[#0A3263] transition-colors hover:bg-white/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F59E0B]/50"
+            >
+                <span>{label}</span>
+
+                <motion.span
+                    animate={{ rotate: open ? 180 : 0 }}
+                    className="text-sm"
+                    aria-hidden="true"
+                >
+                    ↓
+                </motion.span>
+            </button>
+
+            <AnimatePresence initial={false}>
+                {open && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden px-2 pb-2"
+                    >
+                        {items.map(([name, path]) => (
+                            <Link
+                                key={path}
+                                to={path}
+                                onClick={onClose}
+                                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:bg-white/50 hover:text-[#0A3263]"
+                            >
+                                {name}
+                            </Link>
+                        ))}
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+        </div>
+    );
+}
 
 function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [hoveredPath, setHoveredPath] = useState(null);
+    const [openDropdown, setOpenDropdown] = useState(null);
+    const [mobileDropdown, setMobileDropdown] = useState(null);
     const [isScrolled, setIsScrolled] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 20) {
-                setIsScrolled(true);
-            } else {
-                setIsScrolled(false);
+            setIsScrolled(window.scrollY > 20);
+        };
+
+        handleScroll();
+
+        window.addEventListener("scroll", handleScroll, {
+            passive: true,
+        });
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === "Escape") {
+                setOpenDropdown(null);
+                setIsMenuOpen(false);
+                setMobileDropdown(null);
             }
         };
 
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
     }, []);
 
     const closeMenu = () => {
         setIsMenuOpen(false);
+        setMobileDropdown(null);
     };
-
-    const navItems = [
-        { name: "Home", path: "/" },
-        { name: "Products", path: "/products" },
-        { name: "Solutions", path: "/#solutions" },
-        { name: "About", path: "/#about" },
-    ];
 
     return (
         <>
-            {/* ==================================================
-                  DESKTOP / MOBILE NAVBAR
-              ================================================== */}
+            {/* ================================
+                MAIN NAVBAR
+            ================================= */}
+
             <motion.nav
-                initial={{ y: -100, opacity: 0 }}
+                initial={{ y: -24, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{
-                    duration: 0.8,
+                    duration: 0.7,
                     ease: [0.16, 1, 0.3, 1],
                 }}
-                className="fixed left-0 top-0 z-50 w-full px-4 sm:px-6"
+                aria-label="Main navigation"
+                className="fixed left-0 top-0 z-50 w-full px-3 sm:px-6"
             >
+
                 <div
-                    className={`mx-auto flex max-w-7xl items-center justify-between rounded-full transition-all duration-500 ease-in-out sm:px-6 ${isScrolled
-                            ? "mt-2 border border-white/60 bg-white/35 px-4 py-2 shadow-[0_8px_32px_0_rgba(18,63,115,0.08)] backdrop-blur-3xl backdrop-saturate-150"
-                            : "mt-4 border border-white/20 bg-white/20 px-4 py-2.5 shadow-none backdrop-blur-md backdrop-saturate-100"
+                    className={`mx-auto flex max-w-7xl items-center justify-between rounded-full border transition-all duration-500 ${isScrolled
+                            ? "mt-2 border-white/70 bg-white/70 px-3 py-2 shadow-[0_10px_40px_rgba(10,50,99,0.10)] backdrop-blur-2xl sm:px-5"
+                            : "mt-4 border-white/30 bg-white/25 px-3 py-2.5 shadow-none backdrop-blur-xl sm:px-5"
                         }`}
                 >
 
-                    {/* ==================================================
-                          AUSTON HOSPITALITY LOGO
-                      ================================================== */}
+                    {/* ================================
+                        LOGO
+                    ================================= */}
+
                     <Link
                         to="/"
                         onClick={closeMenu}
-                        className="group flex flex-col justify-center transition-transform duration-300 hover:scale-105"
+                        aria-label="Auston home"
+                        className="group shrink-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F59E0B]/60"
                     >
-                        {/* Option A: Pure CSS / SVG Reconstruction for crisp vector look */}
-                        <div className="relative flex items-baseline">
-                            <span className="text-2xl font-black lowercase tracking-tight text-[#0A3263]">
+
+                        <div className="flex items-baseline">
+
+                            <span className="text-2xl font-black lowercase tracking-tight text-[#0A3263] sm:text-[26px]">
                                 auston
                             </span>
 
-                            {/* Origami Arrow Accent */}
                             <svg
-                                className="ml-0.5 h-4 w-4 -translate-y-2.5 transform"
+                                className="ml-0.5 h-4 w-4 -translate-y-2.5"
                                 viewBox="0 0 24 24"
                                 fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
+                                aria-hidden="true"
                             >
                                 <path
-                                    d="M2 18L22 2L14 22L11 13L2 18Z"
-                                    fill="url(#auston-arrow-gradient)"
+                                    d="M2 18 22 2l-8 20-3-9-9 5Z"
+                                    fill="#F59E0B"
                                 />
-                                <defs>
-                                    <linearGradient
-                                        id="auston-arrow-gradient"
-                                        x1="2"
-                                        y1="2"
-                                        x2="22"
-                                        y2="22"
-                                        gradientUnits="userSpaceOnUse"
-                                    >
-                                        <stop stopColor="#FFC82C" />
-                                        <stop offset="1" stopColor="#F59E0B" />
-                                    </linearGradient>
-                                </defs>
                             </svg>
+
                         </div>
 
-                        {/* Tagline Subtext */}
-                        <span className="text-[9px] font-semibold tracking-[0.22em] text-[#0A3263] opacity-90 -mt-1.5 uppercase">
-                            HOSPITALITY
+                        <span className="-mt-1.5 block text-[8px] font-bold uppercase tracking-[0.2em] text-[#0A3263] sm:text-[9px]">
+                            We Deliver Hygiene
                         </span>
 
-                        {/* Option B: If you prefer using an image asset instead, replace the div above with this: */}
-                        {/* <img src="/logo.png" alt="Auston Hospitality" className="h-8 w-auto object-contain" /> */}
                     </Link>
 
-                    {/* ==================================================
-                          DESKTOP NAVIGATION
-                      ================================================== */}
-                    <div
-                        className={`hidden items-center gap-1 rounded-full p-1.5 transition-all duration-500 md:flex ${isScrolled ? "bg-white/20 backdrop-blur-md" : "bg-white/10"
-                            }`}
-                        onMouseLeave={() => setHoveredPath(null)}
-                    >
-                        {navItems.map((item) => (
-                            <Link
-                                key={item.path}
-                                to={item.path}
-                                onMouseEnter={() => setHoveredPath(item.path)}
-                                className="relative rounded-full px-4 py-1.5 text-sm font-semibold transition-colors duration-200"
-                                style={{
-                                    color: hoveredPath === item.path ? "#0A3263" : "#334155"
-                                }}
-                            >
-                                {hoveredPath === item.path && (
-                                    <motion.span
-                                        layoutId="navbar-hover"
-                                        className="absolute inset-0 rounded-full bg-white/70 shadow-sm backdrop-blur-md"
-                                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                                    />
-                                )}
-                                <span className="relative z-10">{item.name}</span>
-                            </Link>
-                        ))}
+                    {/* ================================
+                        DESKTOP NAVIGATION
+                    ================================= */}
+
+                    <div className="hidden items-center gap-0.5 rounded-full bg-white/15 p-1 md:flex">
+
+                        <Link
+                            to="/"
+                            className="rounded-full px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-white/70 hover:text-[#0A3263] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F59E0B]/50"
+                        >
+                            Home
+                        </Link>
+
+                        <Dropdown
+                            label="Products"
+                            items={products}
+                            open={openDropdown === "products"}
+                            onOpen={() => setOpenDropdown("products")}
+                            onClose={() => setOpenDropdown(null)}
+                        />
+
+                        <Dropdown
+                            label="Industries"
+                            items={industries}
+                            open={openDropdown === "industries"}
+                            onOpen={() => setOpenDropdown("industries")}
+                            onClose={() => setOpenDropdown(null)}
+                        />
+
+                        <Link
+                            to="/about-us"
+                            className="rounded-full px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-white/70 hover:text-[#0A3263] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F59E0B]/50"
+                        >
+                            About Us
+                        </Link>
+
+                        <Link
+                            to="/brands"
+                            className="rounded-full px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-white/70 hover:text-[#0A3263] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F59E0B]/50"
+                        >
+                            Brands
+                        </Link>
+
+                        <Link
+                            to="/blog"
+                            className="rounded-full px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-white/70 hover:text-[#0A3263] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F59E0B]/50"
+                        >
+                            Blog
+                        </Link>
+
                     </div>
 
-                    {/* ==================================================
-                          DESKTOP CONTACT
-                      ================================================== */}
+                    {/* ================================
+                        CTA
+                    ================================= */}
+
                     <Link
-                        to="/#contact"
-                        className="group relative hidden overflow-hidden rounded-full bg-[#0A3263] px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-[#0A3263]/20 transition-all duration-300 hover:scale-[1.02] hover:bg-[#062143] hover:shadow-lg hover:shadow-[#0A3263]/30 active:scale-[0.98] md:flex md:items-center md:gap-2"
+                        to="/contact-us"
+                        className="group hidden items-center gap-2 rounded-full bg-[#0A3263] px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-[#0A3263]/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#062143] hover:shadow-lg md:flex"
                     >
-                        <span>Contact Us</span>
-                        <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                        <span>Request a Quote</span>
+
+                        <span
+                            className="transition-transform duration-300 group-hover:translate-x-1"
+                            aria-hidden="true"
+                        >
+                            →
+                        </span>
                     </Link>
 
-                    {/* ==================================================
-                          MOBILE MENU BUTTON
-                      ================================================== */}
+                    {/* ================================
+                        MOBILE MENU BUTTON
+                    ================================= */}
+
                     <button
                         type="button"
                         onClick={() => setIsMenuOpen((open) => !open)}
-                        className="relative flex h-10 w-10 items-center justify-center rounded-full bg-[#0A3263] text-white shadow-md transition-transform duration-200 active:scale-95 md:hidden"
-                        aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                        className="relative flex h-10 w-10 items-center justify-center rounded-full bg-[#0A3263] text-white shadow-md transition-transform active:scale-95 md:hidden"
+                        aria-label={
+                            isMenuOpen
+                                ? "Close navigation menu"
+                                : "Open navigation menu"
+                        }
                         aria-expanded={isMenuOpen}
+                        aria-controls="mobile-navigation"
                     >
+
                         <div className="flex h-4 w-4 flex-col justify-between">
+
                             <motion.span
                                 animate={{
                                     rotate: isMenuOpen ? 45 : 0,
                                     y: isMenuOpen ? 7 : 0,
                                 }}
-                                transition={{ duration: 0.2 }}
                                 className="h-0.5 w-full origin-center rounded-full bg-white"
                             />
+
                             <motion.span
                                 animate={{
                                     opacity: isMenuOpen ? 0 : 1,
-                                    x: isMenuOpen ? -10 : 0,
+                                    x: isMenuOpen ? -8 : 0,
                                 }}
-                                transition={{ duration: 0.15 }}
                                 className="h-0.5 w-full rounded-full bg-white"
                             />
+
                             <motion.span
                                 animate={{
                                     rotate: isMenuOpen ? -45 : 0,
                                     y: isMenuOpen ? -7 : 0,
                                 }}
-                                transition={{ duration: 0.2 }}
                                 className="h-0.5 w-full origin-center rounded-full bg-white"
                             />
+
                         </div>
+
                     </button>
 
                 </div>
+
             </motion.nav>
 
-            {/* ==================================================
-                  MOBILE MENU
-              ================================================== */}
+            {/* ================================
+                MOBILE NAVIGATION
+            ================================= */}
+
             <AnimatePresence>
+
                 {isMenuOpen && (
+
                     <motion.div
-                        initial={{ opacity: 0, y: -10, scale: 0.98 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                        id="mobile-navigation"
+                        initial={{
+                            opacity: 0,
+                            y: -10,
+                            scale: 0.98,
+                        }}
+                        animate={{
+                            opacity: 1,
+                            y: 0,
+                            scale: 1,
+                        }}
+                        exit={{
+                            opacity: 0,
+                            y: -10,
+                            scale: 0.98,
+                        }}
                         transition={{
                             duration: 0.25,
                             ease: [0.16, 1, 0.3, 1],
                         }}
-                        className="fixed left-4 right-4 top-[80px] z-40 md:hidden"
+                        className="fixed left-3 right-3 top-[78px] z-40 md:hidden"
                     >
-                        <div className="overflow-hidden rounded-3xl border border-white/50 bg-white/40 p-4 shadow-2xl shadow-[#0A3263]/10 backdrop-blur-3xl">
 
-                            {/* Menu links */}
-                            <div className="flex flex-col gap-1">
-                                {navItems.map((item) => (
-                                    <Link
-                                        key={item.path}
-                                        to={item.path}
-                                        onClick={closeMenu}
-                                        className="group flex items-center justify-between rounded-2xl px-4 py-3.5 text-base font-semibold text-[#0A3263] transition-colors duration-200 hover:bg-white/40"
-                                    >
-                                        <span>{item.name}</span>
-                                        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/50 text-xs text-[#0A3263] transition-all duration-300 group-hover:bg-[#FFC82C] group-hover:text-[#0A3263] group-hover:translate-x-0.5">
-                                            →
-                                        </span>
-                                    </Link>
-                                ))}
-                            </div>
+                        <div className="max-h-[calc(100vh-96px)] overflow-y-auto rounded-3xl border border-white/60 bg-white/80 p-3 shadow-2xl shadow-[#0A3263]/10 backdrop-blur-2xl">
 
-                            {/* Mobile Contact */}
                             <Link
-                                to="/#contact"
+                                to="/"
                                 onClick={closeMenu}
-                                className="mt-3 flex items-center justify-between rounded-2xl bg-[#0A3263] px-5 py-4 text-sm font-bold text-white shadow-lg shadow-[#0A3263]/20 transition-all duration-200 active:scale-[0.99]"
+                                className="block rounded-2xl px-4 py-3.5 text-base font-semibold text-[#0A3263] hover:bg-white/60"
                             >
-                                <span>Contact Us</span>
-                                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white">
-                                    →
-                                </span>
+                                Home
+                            </Link>
+
+                            <MobileDropdown
+                                label="Products"
+                                items={products}
+                                open={mobileDropdown === "products"}
+                                onToggle={() =>
+                                    setMobileDropdown((value) =>
+                                        value === "products"
+                                            ? null
+                                            : "products"
+                                    )
+                                }
+                                onClose={closeMenu}
+                            />
+
+                            <MobileDropdown
+                                label="Industries"
+                                items={industries}
+                                open={mobileDropdown === "industries"}
+                                onToggle={() =>
+                                    setMobileDropdown((value) =>
+                                        value === "industries"
+                                            ? null
+                                            : "industries"
+                                    )
+                                }
+                                onClose={closeMenu}
+                            />
+
+                            <Link
+                                to="/about-us"
+                                onClick={closeMenu}
+                                className="block rounded-2xl px-4 py-3.5 text-base font-semibold text-[#0A3263] hover:bg-white/60"
+                            >
+                                About Us
+                            </Link>
+
+                            <Link
+                                to="/brands"
+                                onClick={closeMenu}
+                                className="block rounded-2xl px-4 py-3.5 text-base font-semibold text-[#0A3263] hover:bg-white/60"
+                            >
+                                Brands
+                            </Link>
+
+                            <Link
+                                to="/blog"
+                                onClick={closeMenu}
+                                className="block rounded-2xl px-4 py-3.5 text-base font-semibold text-[#0A3263] hover:bg-white/60"
+                            >
+                                Blog
+                            </Link>
+
+                            <Link
+                                to="/contact-us"
+                                onClick={closeMenu}
+                                className="mt-2 flex items-center justify-between rounded-2xl bg-[#0A3263] px-5 py-4 text-sm font-bold text-white shadow-lg shadow-[#0A3263]/20"
+                            >
+                                <span>Request a Quote</span>
+                                <span aria-hidden="true">→</span>
                             </Link>
 
                         </div>
+
                     </motion.div>
+
                 )}
+
             </AnimatePresence>
         </>
     );
