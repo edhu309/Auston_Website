@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Category, Brand, Industry
+from .models import Product, Category, Brand, Industry, Banner, Blog, Testimonial, FAQ, Career, Enquiry
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -40,20 +40,45 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            "id",
-            "name",
-            "slug",
-            "category",
-            "category_name",
-            "brand",
-            "brand_name",
-            "industries",
-            "industry_names",
-            "short_description",
-            "description",
-            "image",
-            "featured",
-            "active",
-            "created_at",
-            "updated_at",
-        ]
+    "id", "name", "slug", "category", "category_name",
+    "brand", "brand_name", "industries", "industry_names",
+    "short_description", "description",
+    "seo_title", "seo_description",
+    "image", "featured", "active",
+    "created_at", "updated_at",
+]
+        
+        
+        
+class BannerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Banner
+        fields = "__all__"
+        
+class BlogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Blog
+        fields = "__all__"
+        
+class TestimonialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Testimonial
+        fields = "__all__"
+        
+class FAQSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FAQ
+        fields = "__all__"
+        
+
+class CareerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Career
+        fields = "__all__"
+        
+
+class EnquirySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Enquiry
+        fields = "__all__"
+        read_only_fields = ["created_at"]
