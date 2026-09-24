@@ -6,6 +6,9 @@ import {
   Phone,
 } from "lucide-react";
 
+import Parallax from "@/components/animations/Parallax";
+import Reveal from "@/components/animations/Reveal";
+
 const companyLinks = [
   {
     name: "About Us",
@@ -99,264 +102,240 @@ export default function Footer() {
       id="contact"
       className="relative overflow-hidden bg-[#071B35] text-white"
     >
-      {/* ============================================================
-          BACKGROUND DECORATION
-      ============================================================ */}
+      {/* Background atmosphere */}
+      <Parallax
+        offset={-30}
+        className="pointer-events-none absolute -right-40 -top-40 h-[450px] w-[450px]"
+      >
+        <div
+          aria-hidden="true"
+          className="h-full w-full rounded-full bg-[#F7C600]/[0.06] blur-[120px]"
+        />
+      </Parallax>
 
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-40 -top-40 h-[450px] w-[450px] rounded-full bg-[#F7C600]/[0.06] blur-[120px]"
-      />
+      <Parallax
+        offset={20}
+        className="pointer-events-none absolute -bottom-40 left-1/4 h-[350px] w-[350px]"
+      >
+        <div
+          aria-hidden="true"
+          className="h-full w-full rounded-full bg-[#123B63]/60 blur-[100px]"
+        />
+      </Parallax>
 
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-40 left-1/4 h-[350px] w-[350px] rounded-full bg-[#123B63]/60 blur-[100px]"
-      />
-
-      {/* Subtle orange detail */}
-
+      {/* Decorative orange detail */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute right-[10%] top-24 hidden h-24 w-24 rounded-full border border-[#F59E0B]/10 lg:block"
       />
 
       <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-
-        {/* ============================================================
-            MAIN FOOTER CONTENT
-        ============================================================ */}
-
+        {/* Main footer content */}
         <div className="grid gap-12 py-16 sm:py-20 lg:grid-cols-[1.35fr_0.75fr_1fr_1fr] lg:gap-12">
+          {/* Brand */}
+          <Reveal duration={0.7} y={25}>
+            <div className="max-w-sm">
+              <Link
+                href="/"
+                aria-label="Auston home"
+                className="group inline-flex items-center rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F7C600]"
+              >
+                <div>
+                  <div className="flex items-baseline">
+                    <span className="text-3xl font-black lowercase tracking-tight text-white transition-colors duration-300 group-hover:text-white sm:text-4xl">
+                      auston
+                    </span>
 
-          {/* ==========================================================
-              BRAND
-          ========================================================== */}
+                    <span
+                      aria-hidden="true"
+                      className="ml-1 h-2.5 w-2.5 rounded-full bg-[#F7C600] transition-transform duration-300 group-hover:scale-125"
+                    />
+                  </div>
 
-          <div className="max-w-sm">
-
-            <Link
-              href="/"
-              aria-label="Auston home"
-              className="inline-flex items-center rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F7C600]"
-            >
-              <div>
-                <div className="flex items-baseline">
-                  <span className="text-3xl font-black lowercase tracking-tight text-white sm:text-4xl">
-                    auston
+                  <span className="mt-0.5 block text-[8px] font-bold uppercase tracking-[0.25em] text-white/70 sm:text-[9px]">
+                    We Deliver Hygiene
                   </span>
-
-                  <span
-                    aria-hidden="true"
-                    className="ml-1 h-2.5 w-2.5 rounded-full bg-[#F7C600]"
-                  />
                 </div>
+              </Link>
 
-                <span className="mt-0.5 block text-[8px] font-bold uppercase tracking-[0.25em] text-white/70 sm:text-[9px]">
+              <p className="mt-7 text-sm leading-7 text-white/55 sm:text-base">
+                Professional hygiene, cleaning and hospitality solutions for
+                demanding commercial and institutional environments.
+              </p>
+
+              {/* Brand statement */}
+              <div className="mt-8 flex items-center gap-3">
+                <span
+                  aria-hidden="true"
+                  className="h-px w-10 bg-[#F7C600]"
+                />
+
+                <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#F7C600]">
                   We Deliver Hygiene
                 </span>
               </div>
-            </Link>
 
-            <p className="mt-7 text-sm leading-7 text-white/55 sm:text-base">
-              Professional hygiene, cleaning and hospitality solutions
-              for demanding commercial and institutional environments.
-            </p>
+              {/* Contact details */}
+              <div className="mt-8 space-y-3">
+                <a
+                  href="tel:7559055888"
+                  className="group flex items-center gap-3 rounded-xl text-sm text-white/55 transition-all duration-300 hover:translate-x-1 hover:text-white focus:outline-none focus-visible:text-white"
+                >
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/[0.06] transition-all duration-300 group-hover:bg-[#F7C600]">
+                    <Phone
+                      aria-hidden="true"
+                      className="h-3.5 w-3.5 text-[#F7C600] transition-colors duration-300 group-hover:text-[#071B35]"
+                    />
+                  </span>
 
-            {/* Brand statement */}
+                  <span>7559055888</span>
+                </a>
 
-            <div className="mt-8 flex items-center gap-3">
-              <span
-                aria-hidden="true"
-                className="h-px w-10 bg-[#F7C600]"
-              />
+                <a
+                  href="mailto:info@auston.in"
+                  className="group flex items-center gap-3 rounded-xl text-sm text-white/55 transition-all duration-300 hover:translate-x-1 hover:text-white focus:outline-none focus-visible:text-white"
+                >
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/[0.06] transition-all duration-300 group-hover:bg-[#F7C600]">
+                    <Mail
+                      aria-hidden="true"
+                      className="h-3.5 w-3.5 text-[#F7C600] transition-colors duration-300 group-hover:text-[#071B35]"
+                    />
+                  </span>
 
-              <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#F7C600]">
-                We Deliver Hygiene
-              </span>
+                  <span className="break-all">info@auston.in</span>
+                </a>
+              </div>
             </div>
+          </Reveal>
 
-            {/* Contact details */}
+          {/* Company */}
+          <Reveal delay={0.08} duration={0.65} y={25}>
+            <div>
+              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white/40">
+                Company
+              </h2>
 
-            <div className="mt-8 space-y-3">
+              <ul className="mt-6 space-y-3.5">
+                {companyLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="group inline-flex items-center gap-2 text-sm text-white/55 transition-all duration-300 hover:translate-x-1 hover:text-white focus:outline-none focus-visible:text-white"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="h-px w-0 bg-[#F7C600] transition-all duration-300 group-hover:w-3"
+                      />
 
-              <a
-                href="tel:7559055888"
-                className="group flex items-center gap-3 text-sm text-white/55 transition-colors hover:text-white"
-              >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/[0.06] transition-colors group-hover:bg-[#F7C600]/10">
-                  <Phone
-                    aria-hidden="true"
-                    className="h-3.5 w-3.5 text-[#F7C600]"
-                  />
-                </span>
-
-                <span>7559055888</span>
-              </a>
-
-              <a
-                href="mailto:info@auston.in"
-                className="group flex items-center gap-3 text-sm text-white/55 transition-colors hover:text-white"
-              >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/[0.06] transition-colors group-hover:bg-[#F7C600]/10">
-                  <Mail
-                    aria-hidden="true"
-                    className="h-3.5 w-3.5 text-[#F7C600]"
-                  />
-                </span>
-
-                <span className="break-all">
-                  info@auston.in
-                </span>
-              </a>
-
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
+          </Reveal>
 
-          </div>
+          {/* Products */}
+          <Reveal delay={0.14} duration={0.65} y={25}>
+            <div>
+              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white/40">
+                Products
+              </h2>
 
-          {/* ==========================================================
-              COMPANY
-          ========================================================== */}
+              <ul className="mt-6 space-y-3.5">
+                {productLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="group inline-flex items-start gap-2 text-sm leading-5 text-white/55 transition-all duration-300 hover:translate-x-1 hover:text-white focus:outline-none focus-visible:text-white"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="mt-2 h-px w-0 shrink-0 bg-[#F7C600] transition-all duration-300 group-hover:w-3"
+                      />
 
-          <div>
-            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white/40">
-              Company
-            </h2>
+                      <span>{link.name}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
 
-            <ul className="mt-6 space-y-3.5">
-              {companyLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="group inline-flex items-center gap-2 text-sm text-white/55 transition-colors duration-300 hover:text-white focus:outline-none focus-visible:text-white"
-                  >
-                    <span
-                      aria-hidden="true"
-                      className="h-px w-0 bg-[#F7C600] transition-all duration-300 group-hover:w-3"
-                    />
+          {/* Industries */}
+          <Reveal delay={0.2} duration={0.65} y={25}>
+            <div>
+              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white/40">
+                Industries
+              </h2>
 
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+              <ul className="mt-6 space-y-3.5">
+                {industryLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="group inline-flex items-start gap-2 text-sm leading-5 text-white/55 transition-all duration-300 hover:translate-x-1 hover:text-white focus:outline-none focus-visible:text-white"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="mt-2 h-px w-0 shrink-0 bg-[#F7C600] transition-all duration-300 group-hover:w-3"
+                      />
 
-          {/* ==========================================================
-              PRODUCTS
-          ========================================================== */}
-
-          <div>
-            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white/40">
-              Products
-            </h2>
-
-            <ul className="mt-6 space-y-3.5">
-              {productLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="group inline-flex items-start gap-2 text-sm leading-5 text-white/55 transition-colors duration-300 hover:text-white focus:outline-none focus-visible:text-white"
-                  >
-                    <span
-                      aria-hidden="true"
-                      className="mt-2 h-px w-0 shrink-0 bg-[#F7C600] transition-all duration-300 group-hover:w-3"
-                    />
-
-                    <span>{link.name}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* ==========================================================
-              INDUSTRIES
-          ========================================================== */}
-
-          <div>
-            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white/40">
-              Industries
-            </h2>
-
-            <ul className="mt-6 space-y-3.5">
-              {industryLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="group inline-flex items-start gap-2 text-sm leading-5 text-white/55 transition-colors duration-300 hover:text-white focus:outline-none focus-visible:text-white"
-                  >
-                    <span
-                      aria-hidden="true"
-                      className="mt-2 h-px w-0 shrink-0 bg-[#F7C600] transition-all duration-300 group-hover:w-3"
-                    />
-
-                    <span>{link.name}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
+                      <span>{link.name}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
         </div>
 
-        {/* ============================================================
-            CONTACT STRIP
-        ============================================================ */}
+        {/* Contact strip */}
+        <Reveal delay={0.1} duration={0.7} y={20}>
+          <div className="border-y border-white/[0.08] py-8">
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-start gap-4">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#F7C600]/10 transition-colors duration-300 hover:bg-[#F7C600]/20">
+                  <MapPin
+                    aria-hidden="true"
+                    className="h-5 w-5 text-[#F7C600]"
+                  />
+                </div>
 
-        <div className="border-y border-white/[0.08] py-8">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#F7C600]">
+                    Visit Auston
+                  </p>
 
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="mt-2 max-w-xl text-sm leading-6 text-white/45">
+                    Auston Mercantile, Near Holy Family Hospital, Muthalakodam
+                    P.O, Thodupuzha, Kerala, India – 685605.
+                  </p>
+                </div>
+              </div>
 
-            <div className="flex items-start gap-4">
+              <Link
+                href="/contact-us"
+                className="group inline-flex w-fit shrink-0 items-center gap-3 rounded-full bg-[#F7C600] px-6 py-3.5 text-sm font-bold text-[#071B35] shadow-lg shadow-[#F7C600]/10 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#FFD83D] hover:shadow-xl hover:shadow-[#F7C600]/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              >
+                <span>Contact Us</span>
 
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#F7C600]/10">
-                <MapPin
+                <ArrowUpRight
                   aria-hidden="true"
-                  className="h-5 w-5 text-[#F7C600]"
+                  className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                 />
-              </div>
-
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#F7C600]">
-                  Visit Auston
-                </p>
-
-                <p className="mt-2 max-w-xl text-sm leading-6 text-white/45">
-                  Auston Mercantile, Near Holy Family Hospital,
-                  Muthalakodam P.O, Thodupuzha, Kerala, India – 685605.
-                </p>
-              </div>
-
+              </Link>
             </div>
-
-            <Link
-              href="/contact-us"
-              className="group inline-flex w-fit shrink-0 items-center gap-3 rounded-full bg-[#F7C600] px-6 py-3.5 text-sm font-bold text-[#071B35] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#FFD83D] hover:shadow-lg hover:shadow-[#F7C600]/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
-            >
-              <span>Contact Us</span>
-
-              <ArrowUpRight
-                aria-hidden="true"
-                className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-              />
-            </Link>
-
           </div>
+        </Reveal>
 
-        </div>
-
-        {/* ============================================================
-            BOTTOM BAR
-        ============================================================ */}
-
+        {/* Bottom bar */}
         <div className="flex flex-col gap-5 py-7 text-xs sm:flex-row sm:items-center sm:justify-between">
-
           <p className="text-white/30">
             © {currentYear} Auston. All rights reserved.
           </p>
 
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-
             <Link
               href="/contact-us"
               className="text-white/35 transition-colors hover:text-white/70 focus:outline-none focus-visible:text-white"
@@ -387,11 +366,8 @@ export default function Footer() {
             >
               Back to top
             </a>
-
           </div>
-
         </div>
-
       </div>
     </footer>
   );
